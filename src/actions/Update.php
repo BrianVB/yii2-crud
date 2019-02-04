@@ -2,19 +2,27 @@
 
 namespace bvb\crud\actions;
 
-use bvb\stripe\backend\models\Product;
-use bvb\stripe\backend\models\Plan;
-use bvb\stripe\backend\models\PlanSearch;
-use bvb\stripe\common\helpers\ProductHelper;
 use Yii;
 use yii\base\Action;
 use yii\web\NotFoundHttpException;
 
 /**
- * Update is for updating Product models
+ * Update is for updating models
  */
 class Update extends CrudAction
 {
+    /**
+     * The name of the file to be rendered for the view
+     * @var string
+     */
+    public $view = 'index';
+
+    /**
+     * The name of the file to be rendered for the view
+     * @var string
+     */
+    public $redirect = ['manage'];
+
     /**
      * Updates the model
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -29,9 +37,9 @@ class Update extends CrudAction
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->addFlash('success', $this->getShortName().' updated.');
-            return $this->controller->redirect(['manage']);
+            return $this->controller->redirect($this->redirect);
         } else {
-            return $this->controller->render('update', [
+            return $this->controller->render($this->view, [
                 'model' => $model,
             ]);
         }
