@@ -3,39 +3,62 @@
 namespace bvb\crud\actions;
 
 use Yii;
+use yii\helpers\Html;
 
 /**
  * Create is for creating models
  */
-class Create extends CrudAction
+class Create extends Action
 {
-    /**
-     * The name of the file to be rendered for the view
-     * @var string
-     */
-    public $view = 'index';
+	/**
+	 * @var array Default values to be used when constructing a new model
+	 */
+	public $modelDefaults = [];
+
+	/**
+	 * @var string The name of the file to be rendered for the view
+	 */
+	public $view = 'create';
+
+	/**
+	 * @var mixed The name of the file to be rendered for the view
+	 */
+	public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
 
     /**
-     * The name of the file to be rendered for the view
-     * @var string
+     * Will set the toolbar buttons with a Submit button
+     * Set the default title for the view to be 'Create [[modelClass]]''
+     * {@inheritdoc}
      */
-    public $redirect = ['manage'];
-
-    /**
-     * Creates a new model.
-     * If creation is successful, the browser will be redirected to the 'manage' page.
-     * @return mixed
-     */
-    public function run()
+    public function init()
     {
-       $model = new $this->model_class;
-       if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           Yii::$app->session->addFlash('success', $this->getShortName().' created.');
-           return $this->controller->redirect($this->redirect);
-       } else {
-           return $this->controller->render($this->view, [
-               'model' => $model,
-           ]);
-       }
+        parent::init();
+
+        Yii::$app->view->title = 'Create '.$this->getShortName();
+
+        Yii::$app->view->params['toolbar']['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
+
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'manage' page.
+	 * @return mixed
+	 */
+	public function run()
+	{
+		if ($this->checkAccess) {
+			call_user_func($this->checkAccess, $this->id);
+		}
+
+		$model = new $this->modelClass($this->modelDefaults);
+
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->addFlash('success', $this->getShortName().' created.');
+			return $this->controller->redirect($this->redirect);
+		} else {
+			return $this->controller->render($this->view, [
+				'model' => $model,
+			]);
+		}
+	}
 }

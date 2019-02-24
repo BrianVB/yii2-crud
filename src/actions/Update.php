@@ -3,25 +3,38 @@
 namespace bvb\crud\actions;
 
 use Yii;
-use yii\base\Action;
 use yii\web\NotFoundHttpException;
+use yii\helpers\Html;
 
 /**
  * Update is for updating models
  */
-class Update extends CrudAction
+class Update extends Action
 {
     /**
-     * The name of the file to be rendered for the view
-     * @var string
+     * @var string The name of the file to be rendered for the view
      */
-    public $view = 'index';
+    public $view = 'update';
 
     /**
      * The name of the file to be rendered for the view
      * @var string
      */
-    public $redirect = ['manage'];
+    public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
+
+    /**
+     * Will set the toolbar buttons with a Submit button
+     * Set the default title for the view to be 'Create [[modelClass]]''
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        Yii::$app->view->title = 'Update '.$this->getShortName();
+
+        Yii::$app->view->params['toolbar']['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
+    }
 
     /**
      * Updates the model
@@ -31,8 +44,10 @@ class Update extends CrudAction
      */
     public function run($id)
     {
-        if( !($model = $this->model_class::findOne($id)) ){
-            throw new NotFoundHttpException('The requested '.strtolower($this->getShortName()).' does not exist.');
+        $model = $this->findModel($id);
+
+        if ($this->checkAccess) {
+            call_user_func($this->checkAccess, $this->id, $model);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

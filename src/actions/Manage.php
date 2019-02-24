@@ -3,19 +3,19 @@
 namespace bvb\crud\actions;
 
 use Yii;
+use yii\helpers\Html;
+use yii\helpers\Inflector;
 use yii\base\InvalidConfigException;
 
 /**
- * Manage is for listing and searching models. It is abstract because it needs 
- * the $search_class property to be set to funciton
+ * Manage is for listing and searching models. 
  */
-class Manage extends CrudAction
+class Manage extends Action
 {
     /**
-     * The search class for the model used in listing models
-     * @var yii\db\ActiveRecord
+     * @var yii\db\ActiveRecord The search class for the model used in listing models
      */
-    public $search_class;
+    public $searchModelClass;
 
     /**
      * The name of the file to be rendered for the view
@@ -24,14 +24,22 @@ class Manage extends CrudAction
     public $view = 'index';
 
     /**
+     * If the searchModelClass is not set in this then it will try to default it to the name of the
+     * modelClass appended by 'Search'. 
+     * Will set the toolbar buttons with a link to create a new model
+     * Set the default title for the view to be 'Manage [[modelClass]]''
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-        if(empty($this->search_class)){
-            throw new InvalidConfigException('Classes extending from the Manage CrudAction must set a `search_class`');
+        if(empty($this->searchModelClass)){
+            $this->searchModelClass = $this->modelClass.'Search';
         }
+
+        Yii::$app->view->title = 'Manage '.Inflector::pluralize($this->getShortName());
+
+        Yii::$app->view->params['toolbar']['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
     }
 
     /**
@@ -40,12 +48,16 @@ class Manage extends CrudAction
      */
     public function run()
     {
-        $search_model = new $this->search_class;
-        $data_provider = $search_model->search(Yii::$app->request->queryParams);
+        if ($this->checkAccess) {
+            call_user_func($this->checkAccess, $this->id);
+        }
+
+        $searchModel = new $this->searchModelClass;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->controller->render($this->view, [
-            'search_model' => $search_model,
-            'data_provider' => $data_provider
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
         ]);
     }
 }

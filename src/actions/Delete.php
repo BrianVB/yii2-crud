@@ -7,13 +7,13 @@ use Yii;
 /**
  * Delete is for deleting models
  */
-class Delete extends CrudAction
+class Delete extends Action
 {
     /**
-     * The name of the file to be rendered for the view
+     * The route to redirect to after successful deletion
      * @var string
      */
-    public $redirect = ['manage'];
+    public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
 
     /**
      * Deletes an existing model.
@@ -24,7 +24,7 @@ class Delete extends CrudAction
      */
     public function run($id, $redirect = null)
     {
-        if( !($model = $this->model_class::findOne($id)) ){
+        if( !($model = $this->modelClass::findOne($id)) ){
             throw new NotFoundHttpException('The requested '.strtolower($this->getShortName()).' does not exist.');
         }
 
