@@ -28,6 +28,7 @@ class UpdateController extends Controller
             'index' => [
                 'class' => Update::class,
                 'modelClass' =>  $this->modelClass,
+                'redirect' => ['manage/']
             ]
         ];
     }

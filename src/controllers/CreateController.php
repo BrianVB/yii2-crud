@@ -28,6 +28,7 @@ class CreateController extends Controller
             'index' => [
                 'class' => Create::class,
                 'modelClass' =>  $this->modelClass,
+                'redirect' => ['manage/']
             ]
         ];
     }

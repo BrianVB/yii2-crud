@@ -28,6 +28,7 @@ class DeleteController extends Controller
             'index' => [
                 'class' => Delete::class,
                 'modelClass' =>  $this->modelClass,
+                'redirect' => ['manage/']
             ]
         ];
     }
