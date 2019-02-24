@@ -3,7 +3,7 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Manage;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * ManageController implements only the Manage action of the CRUD actions

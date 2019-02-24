@@ -3,7 +3,7 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Delete;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * DeleteController implements only the Delete action of the CRUD actions

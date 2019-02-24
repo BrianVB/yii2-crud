@@ -2,6 +2,7 @@
 
 namespace bvb\crud\actions;
 
+use kartik\form\ActiveForm;
 use Yii;
 use yii\helpers\Html;
 
@@ -10,6 +11,14 @@ use yii\helpers\Html;
  */
 class Create extends Action
 {
+	/**
+	 * Configuration for a form that this action will set as a view parameter
+	 * to be wrapped around the rendered view
+	 */
+	public $formConfig = [
+		'class' => ActiveForm::class
+	];
+
 	/**
 	 * @var array Default values to be used when constructing a new model
 	 */
@@ -36,6 +45,9 @@ class Create extends Action
 
         Yii::$app->view->title = 'Create '.$this->getShortName();
 
+        if(!empty($this->formConfig)){
+            Yii::$app->view->params['form'] = Yii::createObject($this->form);
+        }
         Yii::$app->view->params['toolbar']['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 

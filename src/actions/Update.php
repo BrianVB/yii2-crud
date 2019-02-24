@@ -2,8 +2,9 @@
 
 namespace bvb\crud\actions;
 
+use kartik\form\ActiveForm;
 use Yii;
-use yii\web\NotFoundHttpException;
+use yii\base\Model;
 use yii\helpers\Html;
 
 /**
@@ -11,6 +12,19 @@ use yii\helpers\Html;
  */
 class Update extends Action
 {
+    /**
+     * Configuration for a form that this action will set as a view parameter
+     * to be wrapped around the rendered view
+     */
+    public $formConfig = [
+        'class' => ActiveForm::class
+    ];
+
+    /**
+     * @var string the scenario to be assigned to the model before it is validated and updated.
+     */
+    public $scenario = Model::SCENARIO_DEFAULT;
+
     /**
      * @var string The name of the file to be rendered for the view
      */
@@ -31,16 +45,17 @@ class Update extends Action
     {
         parent::init();
 
+        // --- Sets the title and the toolbar
         Yii::$app->view->title = 'Update '.$this->getShortName();
 
+        if(!empty($this->formConfig)){
+            Yii::$app->view->params['form'] = Yii::createObject($this->formConfig);
+        }
         Yii::$app->view->params['toolbar']['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 
     /**
-     * Updates the model
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @throws NotFoundHttpException if the model cannot be found
+     * {@inheritdoc}
      */
     public function run($id)
     {
@@ -50,6 +65,7 @@ class Update extends Action
             call_user_func($this->checkAccess, $this->id, $model);
         }
 
+        $model->setScenario($this->scenario);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->addFlash('success', $this->getShortName().' updated.');
             return $this->controller->redirect($this->redirect);
