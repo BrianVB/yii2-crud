@@ -12,6 +12,15 @@ use yii\helpers\Html;
 class Create extends Action
 {
 	/**
+	 * String constant to be recognized as a redirect to the page to update the 
+	 * newly created model. This is required because the URL does not exist yet
+	 * since the model hasn't been created so we need a way to recognize this
+	 * is the behavior we want
+	 * @var string
+	 */
+	const REDIRECT_TO_UPDATE = 'redirect-to-update';
+
+	/**
 	 * Configuration for a form that this action will set as a view parameter
 	 * to be wrapped around the rendered view
 	 */
@@ -66,7 +75,14 @@ class Create extends Action
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', $this->getShortName().' created.');
-			return $this->controller->redirect($this->redirect);
+
+			if(Yii::$app->request->post('redirect') == self::REDIRECT_TO_UPDATE){
+				$redirect = ['update', 'id' => $model->id];
+			} else {
+				$redirect = $this->redirect;
+			}
+
+			return $this->controller->redirect($redirect);
 		} else {
 			return $this->controller->render($this->view, [
 				'model' => $model,

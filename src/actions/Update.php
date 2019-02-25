@@ -55,7 +55,12 @@ class Update extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * Updates an existing model.
+     * Allows setting a POST variable 'redirect' to set a custom redirect. For easy use of this feature
+     * see [[\bvb\crud\widgets\RedirectButton]] which will render a submit button which if pressed will set the
+     * 'redirect' variable and use the value on the button
+     * @param string $id the primary key of the model.
+     * @return mixed Either a redirect or a string rendering of the page
      */
     public function run($id)
     {
@@ -68,7 +73,9 @@ class Update extends Action
         $model->setScenario($this->scenario);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->addFlash('success', $this->getShortName().' updated.');
-            return $this->controller->redirect($this->redirect);
+
+            // --- If a custom redirect was passed in then use it
+            return $this->controller->redirect(Yii::$app->request->post('redirect') ? Yii::$app->request->post('redirect') : $this->redirect);
         } else {
             return $this->controller->render($this->view, [
                 'model' => $model,
