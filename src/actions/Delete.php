@@ -24,8 +24,9 @@ class Delete extends Action
      */
     public function run($id, $redirect = null)
     {
-        if( !($model = $this->modelClass::findOne($id)) ){
-            throw new NotFoundHttpException('The requested '.strtolower($this->getShortName()).' does not exist.');
+        $model = $this->findModel($id);
+        if ($this->checkAccess) {
+            call_user_func($this->checkAccess, $this->id, $model);
         }
 
         $model->delete();
