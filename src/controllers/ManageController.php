@@ -3,7 +3,9 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Manage;
+use ReflectionClass;
 use yii\web\Controller;
+use yii\helpers\Html;
 
 /**
  * ManageController implements only the Manage action of the CRUD actions
@@ -27,6 +29,7 @@ class ManageController extends Controller
     public $searchModelClass;
 
     /**
+     * Uses the Manage action class at the 'index' route. Sets toolbar button to create new model at CreateController
      * {@inheritdoc}
      */
     public function actions()
@@ -36,6 +39,7 @@ class ManageController extends Controller
                 'class' => Manage::class,
                 'modelClass' =>  $this->modelClass,
                 'searchModelClass' => $this->searchModelClass,
+                'toolbarButtons' => Html::a('New '.((new ReflectionClass($this->modelClass))->getShortName()), ['create/'], ['class' => 'btn btn-success'])
             ]
         ];
     }

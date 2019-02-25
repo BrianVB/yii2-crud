@@ -24,6 +24,14 @@ class Manage extends Action
     public $view = 'index';
 
     /**
+     * Buttons to be rendered in the toolbar. 
+     * If left null, will default to a link to create a new model @see [[init()]]
+     * Setting this to false will force it not to render any tooolbar buttons
+     * @var string
+     */
+    public $toolbarButtons;
+
+    /**
      * If the searchModelClass is not set in this then it will try to default it to the name of the
      * modelClass appended by 'Search'. 
      * Will set the toolbar buttons with a link to create a new model
@@ -39,7 +47,11 @@ class Manage extends Action
 
         Yii::$app->view->title = 'Manage '.Inflector::pluralize($this->getShortName());
 
-        Yii::$app->view->params['toolbar']['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
+        if($this->toolbarButtons === null){
+            Yii::$app->view->params['toolbar']['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
+        } else if(!empty($this->toolbarButtons)){
+            Yii::$app->view->params['toolbar']['buttons'] = $this->toolbarButtons;
+        }
     }
 
     /**
