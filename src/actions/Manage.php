@@ -48,9 +48,9 @@ class Manage extends Action
         Yii::$app->view->title = 'Manage '.Inflector::pluralize($this->getShortName());
 
         if($this->toolbarButtons === null){
-            Yii::$app->view->params['toolbar']['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
+            Yii::$app->view->toolbar['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
         } else if(!empty($this->toolbarButtons)){
-            Yii::$app->view->params['toolbar']['buttons'] = $this->toolbarButtons;
+            Yii::$app->view->toolbar['buttons'] = $this->toolbarButtons;
         }
     }
 

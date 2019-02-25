@@ -46,9 +46,9 @@ class Create extends Action
         Yii::$app->view->title = 'Create '.$this->getShortName();
 
         if(!empty($this->formConfig)){
-            Yii::$app->view->params['form'] = Yii::createObject($this->formConfig);
+            Yii::$app->view->form = Yii::createObject($this->formConfig);
         }
-        Yii::$app->view->params['toolbar']['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
+        Yii::$app->view->toolbar['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 
 	/**
