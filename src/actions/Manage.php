@@ -45,10 +45,10 @@ class Manage extends Action
             $this->searchModelClass = $this->modelClass.'Search';
         }
 
-        Yii::$app->view->title = 'Manage '.Inflector::pluralize($this->getShortName());
+        Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getShortName()));
 
         if($this->toolbarButtons === null){
-            Yii::$app->view->toolbar['buttons'] = Html::a('New '.$this->getShortName(), ['create'], ['class' => 'btn btn-success']);
+            Yii::$app->view->toolbar['buttons'] = Html::a('New '.Inflector::camel2words($this->getShortName()), ['create'], ['class' => 'btn btn-success']);
         } else if(!empty($this->toolbarButtons)){
             Yii::$app->view->toolbar['buttons'] = $this->toolbarButtons;
         }

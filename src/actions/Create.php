@@ -52,7 +52,7 @@ class Create extends Action
     {
         parent::init();
 
-        Yii::$app->view->title = 'Create '.$this->getShortName();
+        Yii::$app->view->title = 'Create '.Inflector::camel2Words($this->getShortName());
 
         if(!empty($this->formConfig)){
             Yii::$app->view->form = Yii::createObject($this->formConfig);

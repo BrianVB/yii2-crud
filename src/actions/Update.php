@@ -46,7 +46,7 @@ class Update extends Action
         parent::init();
 
         // --- Sets the title and the toolbar
-        Yii::$app->view->title = 'Update '.$this->getShortName();
+        Yii::$app->view->title = 'Update '.Inflector::camel2words($this->getShortName());
 
         if(!empty($this->formConfig)){
             Yii::$app->view->form = Yii::createObject($this->formConfig);
