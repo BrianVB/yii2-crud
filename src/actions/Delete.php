@@ -3,6 +3,7 @@
 namespace bvb\crud\actions;
 
 use Yii;
+use yii\helpers\Inflector;
 
 /**
  * Delete is for deleting models
@@ -30,7 +31,7 @@ class Delete extends Action
         }
 
         $model->delete();
-        Yii::$app->session->addFlash('success', $this->getShortName().' deleted.');
+        Yii::$app->session->addFlash('success', Inflector::camel2words($this->getShortName()).' deleted.');
 
         if(!$redirect){
             $redirect = $this->redirect;

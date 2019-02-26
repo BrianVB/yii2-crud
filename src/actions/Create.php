@@ -75,7 +75,7 @@ class Create extends Action
 		$model = new $this->modelClass($this->modelDefaults);
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->addFlash('success', $this->getShortName().' created.');
+			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getShortName()).' created.');
 
 			if(Yii::$app->request->post('redirect') == self::REDIRECT_TO_UPDATE){
 				$redirect = ['update', 'id' => $model->id];

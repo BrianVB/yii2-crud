@@ -73,7 +73,7 @@ class Update extends Action
 
         $model->setScenario($this->scenario);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->addFlash('success', $this->getShortName().' updated.');
+            Yii::$app->session->addFlash('success', Inflector::camel2words($this->getShortName()).' updated.');
 
             // --- If a custom redirect was passed in then use it
             return $this->controller->redirect(Yii::$app->request->post('redirect') ? Yii::$app->request->post('redirect') : $this->redirect);
