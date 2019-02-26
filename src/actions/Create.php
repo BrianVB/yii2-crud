@@ -5,6 +5,7 @@ namespace bvb\crud\actions;
 use kartik\form\ActiveForm;
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\Inflector;
 
 /**
  * Create is for creating models

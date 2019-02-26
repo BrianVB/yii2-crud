@@ -6,6 +6,7 @@ use kartik\form\ActiveForm;
 use Yii;
 use yii\base\Model;
 use yii\helpers\Html;
+use yii\helpers\Inflector;
 
 /**
  * Update is for updating models
