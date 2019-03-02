@@ -77,8 +77,15 @@ class Create extends Action
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getShortName()).' created.');
 
-			if(Yii::$app->request->post('redirect') == self::REDIRECT_TO_UPDATE){
-				$redirect = ['update', 'id' => $model->id];
+			if(strpos(Yii::$app->request->post('redirect'), self::REDIRECT_TO_UPDATE) !== false){
+                $redirect = ['update', 'id' => $model->id];
+
+                // --- Check for additional params
+                $parts = parse_url(Yii::$app->request->post('redirect'));
+                if(!empty($parts['query'])){
+                    $parts = parse_str($parts['query'], $query);
+                    $redirect = array_merge($redirect, $query);
+                }
 			} else {
 				$redirect = $this->redirect;
 			}

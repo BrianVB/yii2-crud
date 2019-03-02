@@ -22,6 +22,11 @@ class RedirectToUpdateButton extends Widget
     public $options = [];
 
     /**
+     * @var array Key/value pairs that will be appended to the 'update' URL as query parameters
+     */
+    public $url_params = [];
+
+    /**
      * @var string the text displayed by the button
      */
     public $content = 'Save &amp; Continue';
@@ -37,7 +42,11 @@ class RedirectToUpdateButton extends Widget
             'class' => 'btn btn-success redirect-to-update-btn',
             'name' => 'redirect'
         ];
-        $options = ArrayHelper::merge($defaultOptions, $this->options, ['value' => Create::REDIRECT_TO_UPDATE]);
+        $value = Create::REDIRECT_TO_UPDATE;
+        if(!empty($this->url_params)){
+            $value .= '?'.http_build_query($this->url_params);
+        }
+        $options = ArrayHelper::merge($defaultOptions, $this->options, ['value' => $value]);
         return Html::button($this->content, $options);
     }
 }
