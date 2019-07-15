@@ -2,6 +2,7 @@
 
 namespace bvb\crud\actions;
 
+use ReflectionClass;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
@@ -42,13 +43,13 @@ class Manage extends Action
     {
         parent::init();
         if(empty($this->searchModelClass)){
-            $this->searchModelClass = $this->modelClass.'Search';
+            $this->searchModelClass = $this->getDefaultSearchModelClass();
         }
 
         Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getShortName()));
 
         if($this->toolbarButtons === null){
-            Yii::$app->view->toolbar['buttons'] = Html::a('New '.Inflector::camel2words($this->getShortName()), ['create'], ['class' => 'btn btn-success']);
+            Yii::$app->view->toolbar['buttons'] = $this->getDefaultButtons();
         } else if(!empty($this->toolbarButtons)){
             Yii::$app->view->toolbar['buttons'] = $this->toolbarButtons;
         }
@@ -71,5 +72,23 @@ class Manage extends Action
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
         ]);
+    }
+
+    /**
+     * Returns a button to create a new model
+     * @return string
+     */
+    protected function getDefaultButtons()
+    {
+        return Html::a('New '.Inflector::camel2words($this->getShortName()), ['create'], ['class' => 'btn btn-success']);
+    }
+
+    /**
+     * @return string The default name for the search model class which would be the model class name with 'Search' appended
+     */
+    protected function getDefaultSearchModelClass()
+    {
+        $reflect = new ReflectionClass($this->modelClass);
+        return $reflect->getNameSpaceName().'\search\\'.$reflect->getShortName().'Search';
     }
 }
