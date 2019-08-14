@@ -3,7 +3,7 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Create;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * CreateController implements only the Create action of the CRUD actions
