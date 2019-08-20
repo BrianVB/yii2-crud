@@ -3,6 +3,7 @@
 namespace bvb\crud\actions;
 
 use Yii;
+use yii\base\Model;
 use yii\web\NotFoundHttpException;
 use yii\helpers\Html;
 
@@ -21,6 +22,11 @@ class Update extends Action
      * @var string
      */
     public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
+
+    /**
+     * @var string the scenario to be assigned to the model before it is validated and updated.
+     */
+    public $scenario = Model::SCENARIO_DEFAULT;
 
     /**
      * Will set the toolbar buttons with a Submit button
