@@ -3,7 +3,7 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Create;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * CreateController implements only the Create action of the CRUD actions
@@ -28,6 +28,7 @@ class CreateController extends Controller
             'index' => [
                 'class' => Create::class,
                 'modelClass' =>  $this->modelClass,
+                'redirect' => ['manage/index']
             ]
         ];
     }

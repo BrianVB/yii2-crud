@@ -3,7 +3,7 @@
 namespace bvb\crud\controllers;
 
 use bvb\crud\actions\Update;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * UpdateController implements only the Update action of the CRUD actions
@@ -28,6 +28,7 @@ class UpdateController extends Controller
             'index' => [
                 'class' => Update::class,
                 'modelClass' =>  $this->modelClass,
+                'redirect' => ['manage/index']
             ]
         ];
     }
