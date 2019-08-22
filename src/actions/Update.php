@@ -32,6 +32,11 @@ class Update extends Action
     public $view = 'update';
 
     /**
+     * @var string Success messsage to be show after successful update
+     */
+    public $flashSuccessMessage;
+
+    /**
      * The name of the file to be rendered for the view
      * @var string
      */
@@ -73,7 +78,7 @@ class Update extends Action
 
         $model->setScenario($this->scenario);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->addFlash('success', Inflector::camel2words($this->getShortName()).' updated.');
+            Yii::$app->session->addFlash('success', $this->getFlashSuccessMessage());
 
             // --- If a custom redirect was passed in then use it
             return $this->controller->redirect(Yii::$app->request->post('redirect') ? Yii::$app->request->post('redirect') : $this->redirect);
@@ -82,5 +87,17 @@ class Update extends Action
                 'model' => $model,
             ]);
         }
+    }
+
+    /**
+     * Returns a default flash success message if one isn't configured
+     * @return string
+     */
+    private function getFlashSuccessMessage()
+    {
+        if(empty($this->flashSuccessMessage)){
+            return Inflector::camel2words($this->getShortName()).' updated.';
+        }
+        return $this->flashSuccessMessage;
     }
 }
