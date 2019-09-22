@@ -2,6 +2,7 @@
 
 namespace bvb\crud\actions;
 
+use bvb\crud\helpers\Helper;
 use ReflectionClass;
 use Yii;
 use yii\helpers\Html;
@@ -71,7 +72,6 @@ class Manage extends Action
      */
     protected function getDefaultSearchModelClass()
     {
-        $reflect = new ReflectionClass($this->modelClass);
-        return $reflect->getNameSpaceName().'\search\\'.$reflect->getShortName().'Search';
+        return Helper::getDefaultSearchModelClass($this->modelClass);
     }
 }
