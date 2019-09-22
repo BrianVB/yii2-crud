@@ -40,12 +40,13 @@ class Create extends Action
 	public $view = 'create';
 
 	/**
-	 * @var mixed The name of the file to be rendered for the view
+	 * @var mixed Route to redirect to after successful creation
 	 */
-	public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
+	public $redirect = ['index'];
 
     /**
-     * Will set the toolbar buttons with a Submit button
+     * Add submit button to the toolbar
+     * Initialize the form used to create the model
      * Set the default title for the view to be 'Create [[modelClass]]''
      * {@inheritdoc}
      */
@@ -53,17 +54,15 @@ class Create extends Action
     {
         parent::init();
 
-        Yii::$app->view->title = 'Create '.Inflector::camel2Words($this->getShortName());
+        Yii::$app->view->title = 'Create '.Inflector::camel2Words($this->getModelShortName());
 
         if(!empty($this->formConfig)){
             Yii::$app->view->form = Yii::createObject($this->formConfig);
         }
-        Yii::$app->view->toolbar['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 
 	/**
 	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'manage' page.
 	 * @return mixed
 	 */
 	public function run()
@@ -75,7 +74,7 @@ class Create extends Action
 		$model = new $this->modelClass($this->modelDefaults);
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getShortName()).' created.');
+			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
 
 			if(strpos(Yii::$app->request->post('redirect'), self::REDIRECT_TO_UPDATE) !== false){
                 $redirect = ['update', 'id' => $model->id];
@@ -96,5 +95,13 @@ class Create extends Action
 				'model' => $model,
 			]);
 		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function getDefaultToolbarButtons()
+	{
+		return Html::submitButton('Save', ['class' => 'btn btn-success']);
 	}
 }

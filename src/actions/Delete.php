@@ -11,14 +11,13 @@ use yii\helpers\Inflector;
 class Delete extends Action
 {
     /**
-     * The route to redirect to after successful deletion
-     * @var string
+     * @var string The route to redirect to after successful deletion
      */
-    public $redirect = ['index']; // --- Defaults to the Manage action in the ActiveController
+    public $redirect = ['index'];
 
     /**
      * Deletes an existing model.
-     * If deletion is successful, the browser will be redirected to the 'manage' page.
+     * If deletion is successful, the default redirection is to the index action
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -31,7 +30,7 @@ class Delete extends Action
         }
 
         $model->delete();
-        Yii::$app->session->addFlash('success', Inflector::camel2words($this->getShortName()).' deleted.');
+        Yii::$app->session->addFlash('success', Inflector::camel2words($this->getModelShortName()).' deleted.');
 
         if(!$redirect){
             $redirect = $this->redirect;

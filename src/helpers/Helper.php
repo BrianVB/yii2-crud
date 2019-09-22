@@ -12,14 +12,10 @@ use yii\helpers\Inflector;
 class Helper
 {
     /**
-     * Returns the name of a class without the full namespace
-     * @return string
+     * Returns the class shortname in a readable format
      */
-    protected function getShortName($class)
+    static function getShortName($class)
     {
-        $reflect = new ReflectionClass($class);
-        return $reflect->getShortName();
+        return (new ReflectionClass($class))->getShortName();
     }
-
-    
 }

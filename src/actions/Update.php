@@ -52,12 +52,11 @@ class Update extends Action
         parent::init();
 
         // --- Sets the title and the toolbar
-        Yii::$app->view->title = 'Update '.Inflector::camel2words($this->getShortName());
+        Yii::$app->view->title = 'Update '.Inflector::camel2words($this->getModelShortName());
 
         if(!empty($this->formConfig)){
             Yii::$app->view->form = Yii::createObject($this->formConfig);
         }
-        Yii::$app->view->toolbar['buttons'] = Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 
     /**
@@ -96,8 +95,16 @@ class Update extends Action
     private function getFlashSuccessMessage()
     {
         if(empty($this->flashSuccessMessage)){
-            return Inflector::camel2words($this->getShortName()).' updated.';
+            return Inflector::camel2words($this->getModelShortName()).' updated.';
         }
         return $this->flashSuccessMessage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultToolbarButtons()
+    {
+        return Html::submitButton('Save', ['class' => 'btn btn-success']);
     }
 }

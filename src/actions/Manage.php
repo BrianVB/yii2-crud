@@ -19,22 +19,12 @@ class Manage extends Action
     public $searchModelClass;
 
     /**
-     * The name of the file to be rendered for the view
-     * @var string
+     * @var string The name of the file to be rendered for the view
      */
     public $view = 'index';
 
     /**
-     * Buttons to be rendered in the toolbar. 
-     * If left null, will default to a link to create a new model @see [[init()]]
-     * Setting this to false will force it not to render any tooolbar buttons
-     * @var string
-     */
-    public $toolbarButtons;
-
-    /**
-     * If the searchModelClass is not set in this then it will try to default it to the name of the
-     * modelClass appended by 'Search'. 
+     * Sets default searchModelClass if not set
      * Will set the toolbar buttons with a link to create a new model
      * Set the default title for the view to be 'Manage [[modelClass]]''
      * {@inheritdoc}
@@ -46,13 +36,7 @@ class Manage extends Action
             $this->searchModelClass = $this->getDefaultSearchModelClass();
         }
 
-        Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getShortName()));
-
-        if($this->toolbarButtons === null){
-            Yii::$app->view->toolbar['buttons'] = $this->getDefaultButtons();
-        } else if(!empty($this->toolbarButtons)){
-            Yii::$app->view->toolbar['buttons'] = $this->toolbarButtons;
-        }
+        Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getModelShortName()));
     }
 
     /**
@@ -75,12 +59,11 @@ class Manage extends Action
     }
 
     /**
-     * Returns a button to create a new model
-     * @return string
+     * {@inheritdoc}
      */
-    protected function getDefaultButtons()
+    protected function getViewToolbarButtons()
     {
-        return Html::a('New '.Inflector::camel2words($this->getShortName()), ['create'], ['class' => 'btn btn-success']);
+        return Html::a('New '.Inflector::camel2words($this->getModelShortName()), ['create'], ['class' => 'btn btn-success']);
     }
 
     /**
