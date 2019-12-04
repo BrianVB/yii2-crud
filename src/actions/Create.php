@@ -71,7 +71,10 @@ class Create extends Action
 			call_user_func($this->checkAccess, $this->id);
 		}
 
-		$model = new $this->modelClass($this->modelDefaults);
+		$model = Yii::createObject(
+			$this->modelClass,
+			$this->modelDefaults
+		);
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
