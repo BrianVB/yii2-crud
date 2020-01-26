@@ -20,6 +20,12 @@ class Manage extends Action
     public $searchModelClass;
 
     /**
+     * Properties to instantiate the search model with using Yii::createObject()
+     * @var array
+     */
+    public $searchModelDefaults = [];
+
+    /**
      * @var string The name of the file to be rendered for the view
      */
     public $view = 'index';
@@ -37,7 +43,9 @@ class Manage extends Action
             $this->searchModelClass = $this->getDefaultSearchModelClass();
         }
 
-        Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getModelShortName()));
+        if(empty(Yii::$app->view->title)){
+            Yii::$app->view->title = 'Manage '.Inflector::camel2words(Inflector::pluralize($this->getModelShortName()));
+        }
     }
 
     /**
@@ -50,7 +58,10 @@ class Manage extends Action
             call_user_func($this->checkAccess, $this->id);
         }
 
-        $searchModel = new $this->searchModelClass;
+        $searchModel = Yii::createObject(\yii\helpers\ArrayHelper::merge(
+            ['class' => $this->searchModelClass],
+            $this->searchModelDefaults
+        ));
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->controller->render($this->view, [

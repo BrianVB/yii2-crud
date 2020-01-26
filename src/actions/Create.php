@@ -54,7 +54,9 @@ class Create extends Action
     {
         parent::init();
 
-        Yii::$app->view->title = 'Create '.Inflector::camel2Words($this->getModelShortName());
+        if(empty(Yii::$app->view->title)){
+        	Yii::$app->view->title = 'Create '.Inflector::camel2Words($this->getModelShortName());
+        }
 
         if(!empty($this->formConfig)){
             Yii::$app->view->form = Yii::createObject($this->formConfig);
@@ -71,10 +73,10 @@ class Create extends Action
 			call_user_func($this->checkAccess, $this->id);
 		}
 
-		$model = Yii::createObject(
-			$this->modelClass,
+		$model = Yii::createObject(\yii\helpers\ArrayHelper::merge(
+			['class' => $this->modelClass],
 			$this->modelDefaults
-		);
+		));
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
@@ -94,6 +96,9 @@ class Create extends Action
 
 			return $this->controller->redirect($redirect);
 		} else {
+			if($model->hasErrors()){
+				Yii::debug(\yii\helpers\VarDumper::dumpAsString($model));
+			}
 			return $this->controller->render($this->view, [
 				'model' => $model,
 			]);
