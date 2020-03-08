@@ -12,6 +12,16 @@ use yii\helpers\Inflector;
 class Helper
 {
     /**
+     * String constant used in the `redirect` GET variable of a URL to indicate
+     * that we want to save the model and coninue. In Create actions it will 
+     * redirect to update and in Update actions it will refresh
+     * @see \bvb\crud\actions\Create
+     * @see \bvb\crud\actions\Update
+     * @var string
+     */
+    const SAVE_AND_CONTINUE = 'save-and-continue';
+
+    /**
      * @return string The class shortname in a readable format
      */
     static function getShortName($class)

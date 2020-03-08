@@ -2,6 +2,7 @@
 
 namespace bvb\crud\actions;
 
+use bvb\crud\helpers\Helper;
 use kartik\form\ActiveForm;
 use Yii;
 use yii\helpers\Html;
@@ -12,15 +13,6 @@ use yii\helpers\Inflector;
  */
 class Create extends Action
 {
-	/**
-	 * String constant to be recognized as a redirect to the page to update the 
-	 * newly created model. This is required because the URL does not exist yet
-	 * since the model hasn't been created so we need a way to recognize this
-	 * is the behavior we want
-	 * @var string
-	 */
-	const REDIRECT_TO_UPDATE = 'redirect-to-update';
-
 	/**
 	 * Configuration for a form that this action will set as a view parameter
 	 * to be wrapped around the rendered view
@@ -45,7 +37,6 @@ class Create extends Action
 	public $redirect = ['index'];
 
     /**
-     * Add submit button to the toolbar
      * Initialize the form used to create the model
      * Set the default title for the view to be 'Create [[modelClass]]''
      * {@inheritdoc}
@@ -81,7 +72,7 @@ class Create extends Action
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
 
-			if(strpos(Yii::$app->request->post('redirect'), self::REDIRECT_TO_UPDATE) !== false){
+			if(strpos(Yii::$app->request->post('redirect'), Helper::SAVE_AND_CONTINUE) !== false){
                 $redirect = ['update', 'id' => $model->id];
 
                 // --- Check for additional params

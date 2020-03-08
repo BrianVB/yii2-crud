@@ -2,6 +2,7 @@
 
 namespace bvb\crud\actions;
 
+use bvb\crud\helpers\Helper;
 use kartik\form\ActiveForm;
 use Yii;
 use yii\base\Model;
@@ -79,6 +80,9 @@ class Update extends Action
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->addFlash('success', $this->getFlashSuccessMessage());
 
+            if(strpos(Yii::$app->request->post('redirect'), Helper::SAVE_AND_CONTINUE) !== false){
+                return $this->controller->refresh();
+            }
             // --- If a custom redirect was passed in then use it
             return $this->controller->redirect(Yii::$app->request->post('redirect') ? Yii::$app->request->post('redirect') : $this->redirect);
         } else {
