@@ -2,7 +2,7 @@
 
 namespace bvb\crud\widgets;
 
-use bvb\crud\actions\Create;
+use bvb\crud\helpers\Helper;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -14,7 +14,7 @@ use yii\helpers\Html;
  * This is especially useful for using on forms that impelement [[\bvb\crud\actions\Update]]
  * where you want a successful form submission to redirect to a specific URL
  */
-class RedirectToUpdateButton extends Widget
+class SaveAndContinueButton extends Widget
 {
     /**
      * @var array options passed to the call to [[\yii\helpers\Html::button()]]
@@ -24,7 +24,7 @@ class RedirectToUpdateButton extends Widget
     /**
      * @var array Key/value pairs that will be appended to the 'update' URL as query parameters
      */
-    public $url_params = [];
+    public $urlParams = [];
 
     /**
      * @var string the text displayed by the button
@@ -42,9 +42,9 @@ class RedirectToUpdateButton extends Widget
             'class' => 'btn btn-success redirect-to-update-btn',
             'name' => 'redirect'
         ];
-        $value = Create::REDIRECT_TO_UPDATE;
-        if(!empty($this->url_params)){
-            $value .= '?'.http_build_query($this->url_params);
+        $value = Helper::SAVE_AND_CONTINUE;
+        if(!empty($this->urlParams)){
+            $value .= '?'.http_build_query($this->urlParams);
         }
         $options = ArrayHelper::merge($defaultOptions, $this->options, ['value' => $value]);
         return Html::button($this->content, $options);
