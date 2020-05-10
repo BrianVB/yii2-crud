@@ -17,7 +17,7 @@ class Action extends \yii\rest\Action
      * HTML of buttons to be rendered in the toolbar
      * @var string
      */
-    public $toolbarButtons;
+    public $toolbarWidgets;
 
 	/**
 	 * Set certain components of the view regularly tied into crud actions like
@@ -27,20 +27,20 @@ class Action extends \yii\rest\Action
 	public function init()
 	{
 		parent::init();
-		$this->setViewToolbarButtons();
+		$this->setViewToolbarWidgets();
 	}
 
 	/**
-	 * Sets the buttons for the view toolbar with the value of [[self::$toolbarButtons]]
-	 * or if left as null will attempt to render default buttons
+	 * Sets the widgets for the view toolbar with the value of [[self::$toolbarWidgets]]
+	 * or if left as null will attempt to render default widgets
 	 * @return void
 	 */
-	protected function setViewToolbarButtons()
+	protected function setViewToolbarWidgets()
 	{ 
-		if($this->toolbarButtons === null){
-			Yii::$app->view->toolbar['buttons'] = $this->getDefaultToolbarButtons();
-		} else if(!empty($this->toolbarButtons)){
-			Yii::$app->view->toolbar['buttons'] = $this->toolbarButtons;
+		if($this->toolbarWidgets === null){
+			Yii::$app->view->toolbar['widgets'] = $this->getDefaultToolbarWidgets();
+		} else {
+			Yii::$app->view->toolbar['widgets'] = $this->toolbarWidgets;
 		}
 	}
 
@@ -48,9 +48,9 @@ class Action extends \yii\rest\Action
 	 * Meant to be overridden by subclasses to add buttons to the view toolbar
 	 * @return string
 	 */
-	protected function getDefaultToolbarButtons()
+	protected function getDefaultToolbarWidgets()
 	{
-		return '';
+		return [];
 	}
 
 	/**

@@ -39,7 +39,9 @@ class ManageController extends Controller
                 'class' => Manage::class,
                 'modelClass' =>  $this->modelClass,
                 'searchModelClass' => $this->searchModelClass,
-                'toolbarButtons' => Html::a('New '.((new ReflectionClass($this->modelClass))->getShortName()), ['create/'], ['class' => 'btn btn-success'])
+                'toolbarWidgets' => [
+                    Html::a('New '.((new ReflectionClass($this->modelClass))->getShortName()), ['create/'], ['class' => 'btn btn-success'])
+                ]
             ]
         ];
     }

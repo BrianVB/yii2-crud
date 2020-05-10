@@ -73,9 +73,11 @@ class Manage extends Action
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultToolbarButtons()
+    protected function getDefaultToolbarWidgets()
     {
-        return Html::a('New '.Inflector::camel2words($this->getModelShortName()), ['create'], ['class' => 'btn btn-success']);
+        return [
+            Html::a('New '.Inflector::camel2words($this->getModelShortName()), ['create'], ['class' => 'btn btn-success'])
+        ];
     }
 
     /**

@@ -107,8 +107,10 @@ class Update extends Action
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultToolbarButtons()
+    protected function getDefaultToolbarWidgets()
     {
-        return Html::submitButton('Save', ['class' => 'btn btn-success']);
+        return [
+            Html::submitButton('Save', ['class' => 'btn btn-success'])
+        ];
     }
 }
