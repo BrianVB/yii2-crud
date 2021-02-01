@@ -13,6 +13,12 @@ use Yii;
  */
 class Action extends \yii\rest\Action
 {
+	/**
+	 * String constant for the name of the init event
+	 * @var string
+	 */
+	const EVENT_INIT = 'init';
+
     /**
      * HTML of buttons to be rendered in the toolbar
      * @var string
@@ -28,6 +34,7 @@ class Action extends \yii\rest\Action
 	{
 		parent::init();
 		$this->setViewToolbarWidgets();
+		$this->trigger(self::EVENT_INIT);
 	}
 
 	/**
