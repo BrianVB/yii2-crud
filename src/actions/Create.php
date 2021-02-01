@@ -71,21 +71,7 @@ class Create extends Action
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
-
-			if(strpos(Yii::$app->request->post('redirect'), Helper::SAVE_AND_CONTINUE) !== false){
-                $redirect = ['update', 'id' => $model->id];
-
-                // --- Check for additional params
-                $parts = parse_url(Yii::$app->request->post('redirect'));
-                if(!empty($parts['query'])){
-                    $parts = parse_str($parts['query'], $query);
-                    $redirect = array_merge($redirect, $query);
-                }
-			} else {
-				$redirect = $this->redirect;
-			}
-
-			return $this->controller->redirect($redirect);
+			return $this->controller->redirect($this->getRedirect());
 		} else {
 			if($model->hasErrors()){
 				Yii::debug(\yii\helpers\VarDumper::dumpAsString($model));
@@ -94,6 +80,28 @@ class Create extends Action
 				'model' => $model,
 			]);
 		}
+	}
+
+	/**
+	 * Gets the redirect in the format needed based on GET variables
+	 * @return array|string
+	 */
+	protected function getRedirect()
+	{
+		$redirect = Yii::$app->request->post('redirect');
+		if(empty($redirect)){
+			$redirect = $this->redirect;
+		} elseif(strpos($redirect, Helper::SAVE_AND_CONTINUE) !== false){
+            $redirect = ['update', 'id' => $model->id];
+
+            // --- Check for additional params
+            $parts = parse_url(Yii::$app->request->post('redirect'));
+            if(!empty($parts['query'])){
+                $parts = parse_str($parts['query'], $query);
+                $redirect = array_merge($redirect, $query);
+            }
+        }
+        return $redirect;
 	}
 
 	/**
