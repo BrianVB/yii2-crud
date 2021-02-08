@@ -71,7 +71,7 @@ class Create extends Action
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->addFlash('success', Inflector::camel2Words($this->getModelShortName()).' created.');
-			return $this->controller->redirect($this->getRedirect());
+			return $this->controller->redirect($this->getRedirect($model));
 		} else {
 			if($model->hasErrors()){
 				Yii::debug(\yii\helpers\VarDumper::dumpAsString($model));
@@ -86,7 +86,7 @@ class Create extends Action
 	 * Gets the redirect in the format needed based on GET variables
 	 * @return array|string
 	 */
-	protected function getRedirect()
+	protected function getRedirect($model)
 	{
 		$redirect = Yii::$app->request->post('redirect');
 		if(empty($redirect)){
